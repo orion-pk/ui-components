@@ -1,19 +1,48 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   ShieldCheck,
   Users,
   X,
-  GraduationCap,
-  BookOpen,
-  Heart,
 } from 'lucide-react';
 
-export const Sidebar = ({ isMobileOpen, closeMobile, user, isSuperAdmin }) => {
+export const Sidebar = ({ isMobileOpen, closeMobile, user, isSuperAdmin, activePath = '/admin/users', LinkComponent }) => {
   const BrandConfig = {
     brandName: 'Academia Platform',
     primaryColor: '#02658b',
     sidebarBg: '#ffffff',
+  };
+
+  const renderItem = (to, icon, label) => {
+    const isActive = activePath === to;
+    const itemStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.75rem',
+      padding: '0.65rem 0.85rem',
+      borderRadius: '8px',
+      fontSize: '0.88rem',
+      fontWeight: 600,
+      textDecoration: 'none',
+      color: isActive ? '#02658b' : '#475569',
+      backgroundColor: isActive ? '#e5f3f7' : 'transparent',
+      borderLeft: isActive ? '3.5px solid #02658b' : '3.5px solid transparent',
+    };
+
+    if (LinkComponent) {
+      return (
+        <LinkComponent to={to} onClick={closeMobile} style={itemStyle}>
+          {icon}
+          <span>{label}</span>
+        </LinkComponent>
+      );
+    }
+
+    return (
+      <a href={to} onClick={(e) => { e.preventDefault(); closeMobile && closeMobile(); }} style={itemStyle}>
+        {icon}
+        <span>{label}</span>
+      </a>
+    );
   };
 
   return (
@@ -77,49 +106,8 @@ export const Sidebar = ({ isMobileOpen, closeMobile, user, isSuperAdmin }) => {
           </div>
 
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <NavLink
-              to="/admin/users"
-              onClick={closeMobile}
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-              style={({ isActive }) => ({
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.65rem 0.85rem',
-                borderRadius: '8px',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                color: isActive ? '#02658b' : '#475569',
-                backgroundColor: isActive ? '#e5f3f7' : 'transparent',
-                borderLeft: isActive ? '3.5px solid #02658b' : '3.5px solid transparent',
-              })}
-            >
-              <Users size={18} />
-              <span>User & Role Manager</span>
-            </NavLink>
-
-            <NavLink
-              to="/admin/governance"
-              onClick={closeMobile}
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-              style={({ isActive }) => ({
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.65rem 0.85rem',
-                borderRadius: '8px',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                color: isActive ? '#02658b' : '#475569',
-                backgroundColor: isActive ? '#e5f3f7' : 'transparent',
-                borderLeft: isActive ? '3.5px solid #02658b' : '3.5px solid transparent',
-              })}
-            >
-              <ShieldCheck size={18} />
-              <span>Admin Governance</span>
-            </NavLink>
+            {renderItem('/admin/users', <Users size={18} />, 'User & Role Manager')}
+            {renderItem('/admin/governance', <ShieldCheck size={18} />, 'Admin Governance')}
           </nav>
         </div>
       </aside>
