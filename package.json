@@ -10,10 +10,13 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./dist/style.css": "./dist/style.css",
+    "./src/*": "./src/*",
+    "./components/*": "./src/components/*"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
