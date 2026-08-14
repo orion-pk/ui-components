@@ -1,65 +1,170 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPerPage, onItemsPerPageChange }) => {
+export const Pagination = ({
+  currentPage = 1,
+  pageSize = 10,
+  totalItems = 0,
+  onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [10, 20, 30, 50],
+}) => {
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+  const handlePageSizeChange = (newSize) => {
+    if (onPageSizeChange) {
+      onPageSizeChange(newSize);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (onPageChange && newPage >= 1 && newPage <= totalPages) {
+      onPageChange(newPage);
+    }
+  };
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', fontSize: '0.82rem', color: '#475569' }}>
-      <div>
-        {totalItems !== undefined && (
-          <span>Showing Page <strong style={{ color: '#0f172a' }}>{currentPage}</strong> of <strong style={{ color: '#0f172a' }}>{totalPages || 1}</strong> ({totalItems} total items)</span>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '1rem',
+        width: 'fit-content',
+        padding: '0.4rem 0.85rem',
+        background: '#FFFFFF',
+        borderRadius: '8px',
+        border: '1.5px solid #cbd5e1',
+        fontSize: '0.85rem',
+        color: '#475569',
+        flexShrink: 0,
+      }}
+    >
+      {/* Left Controls: Previous, Page Pills, Next */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <button
+          type="button"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={{
+            background: '#FFFFFF',
+            border: '1.5px solid #cbd5e1',
+            borderRadius: '0.375rem',
+            padding: '0.25rem 0.65rem',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+            color: currentPage === 1 ? '#94a3b8' : '#0f172a',
+            cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+          }}
+        >
+          Previous
+        </button>
+
+        {/* Page 1 Pill */}
+        <button
+          type="button"
+          onClick={() => handlePageChange(1)}
+          style={{
+            background: currentPage === 1 ? '#f1f5f9' : '#FFFFFF',
+            border: '1.5px solid #cbd5e1',
+            borderRadius: '0.375rem',
+            padding: '0.25rem 0.55rem',
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            color: '#0f172a',
+            cursor: 'pointer',
+          }}
+        >
+          1
+        </button>
+
+        {totalPages > 2 && <span style={{ color: '#94a3b8' }}>...</span>}
+
+        {totalPages > 1 && (
+          <button
+            type="button"
+            onClick={() => handlePageChange(totalPages)}
+            style={{
+              background: currentPage === totalPages ? '#f1f5f9' : '#FFFFFF',
+              border: '1.5px solid #cbd5e1',
+              borderRadius: '0.375rem',
+              padding: '0.25rem 0.55rem',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              color: '#0f172a',
+              cursor: 'pointer',
+            }}
+          >
+            {totalPages}
+          </button>
         )}
+
+        <button
+          type="button"
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={{
+            background: '#02658b',
+            color: '#FFFFFF',
+            border: 'none',
+            borderRadius: '0.375rem',
+            padding: '0.25rem 0.75rem',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+            cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+            opacity: currentPage === totalPages ? 0.5 : 1,
+          }}
+        >
+          Next
+        </button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        {onItemsPerPageChange && (
+      {/* Right Selectors: Rows 10 ▾ & Page # 01 ▾ */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <span>Rows</span>
           <select
-            value={itemsPerPage}
-            onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-            style={{ padding: '0.3rem 0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '0.8rem' }}
+            value={pageSize}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+            style={{
+              background: '#FFFFFF',
+              border: '1.5px solid #cbd5e1',
+              borderRadius: '0.375rem',
+              padding: '0.2rem 0.45rem',
+              fontSize: '0.82rem',
+              color: '#0f172a',
+              cursor: 'pointer',
+            }}
           >
-            <option value={10}>10 per page</option>
-            <option value={25}>25 per page</option>
-            <option value={50}>50 per page</option>
+            {pageSizeOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt} ▾
+              </option>
+            ))}
           </select>
-        )}
+        </div>
 
-        <button
-          type="button"
-          disabled={currentPage <= 1}
-          onClick={() => onPageChange(currentPage - 1)}
-          style={{
-            padding: '0.35rem 0.6rem',
-            borderRadius: '4px',
-            background: '#ffffff',
-            border: '1px solid #cbd5e1',
-            cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
-            opacity: currentPage <= 1 ? 0.5 : 1,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ChevronLeft size={16} />
-        </button>
-
-        <span style={{ fontWeight: 700, color: '#02658b' }}>{currentPage}</span>
-
-        <button
-          type="button"
-          disabled={currentPage >= totalPages}
-          onClick={() => onPageChange(currentPage + 1)}
-          style={{
-            padding: '0.35rem 0.6rem',
-            borderRadius: '4px',
-            background: '#ffffff',
-            border: '1px solid #cbd5e1',
-            cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-            opacity: currentPage >= totalPages ? 0.5 : 1,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ChevronRight size={16} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <span>Page #</span>
+          <select
+            value={currentPage}
+            onChange={(e) => handlePageChange(Number(e.target.value))}
+            style={{
+              background: '#FFFFFF',
+              border: '1.5px solid #cbd5e1',
+              borderRadius: '0.375rem',
+              padding: '0.2rem 0.45rem',
+              fontSize: '0.82rem',
+              color: '#0f172a',
+              cursor: 'pointer',
+            }}
+          >
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <option key={p} value={p}>
+                {p < 10 ? `0${p}` : p} ▾
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );

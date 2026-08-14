@@ -12,12 +12,13 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'lucide-react'],
+      external: ['react', 'react-dom', 'lucide-react', 'react-router-dom'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
           'lucide-react': 'LucideReact',
+          'react-router-dom': 'ReactRouterDOM',
         },
       },
     },

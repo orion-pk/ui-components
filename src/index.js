@@ -5,6 +5,7 @@ import './styles.css';
 // Badges & Pills
 export { StatusPill } from './components/Badges/StatusPill';
 export { SeverityPill } from './components/Badges/SeverityPill';
+export { GlobalPermissionsBadge } from './components/Badges/GlobalPermissionsBadge';
 
 // Cards
 export { StatCard } from './components/Cards/StatCard';
@@ -13,9 +14,11 @@ export { UserDetailsCard } from './components/Cards/UserDetailsCard';
 
 // Feedback & Overlay
 export { CustomLoader } from './components/Feedback/CustomLoader';
-export { AlertDialog } from './components/Feedback/AlertDialog';
+export { ConfirmModal, AlertDialog } from './components/Feedback/ConfirmModal';
 
 // Navigation & Updates
+export { Navbar } from './components/Navigation/Navbar';
+export { Sidebar } from './components/Navigation/Sidebar';
 export { ProfileDropdown } from './components/Navigation/ProfileDropdown';
 export { VersionBadge } from './components/Navigation/VersionBadge';
 export { UpdateDialog } from './components/Navigation/UpdateDialog';
